@@ -4,15 +4,11 @@ import hashlib
 import hmac
 import sys
 
-key_scopes_dict = {'Authentication': 'com.lyndir.masterpassword'}
-                   # 'Identification': 'com.lyndir.masterpassword.login',
-                   # 'Recovery': 'com.lyndir.masterpassword.answer'}
+_ENCODING = 'utf-8'
+_BYTE_ORDER = 'big'
+_INT_BYTES = 4
 
-ENCODING = 'utf-8'
-BYTE_ORDER = 'big'
-INT_BYTES = 4
-
-def masterKey(master_password, name, purpose):
+def masterKey(master_password, name):
     """Phase 1: Your identity
 
     Your identity is defined by your master key.  This key unlocks all of your
@@ -39,19 +35,19 @@ def masterKey(master_password, name, purpose):
     cryptographic key from the user’s name and master password using a fixed
     set of parameters.
     """
-    key = master_password.encode(ENCODING)
-    length_name_as_bytes = len(name.encode(ENCODING)).to_bytes(length=INT_BYTES,
-                                                               byteorder=BYTE_ORDER,
+    key = master_password.encode(_ENCODING)
+    length_name_as_bytes = len(name.encode(_ENCODING)).to_bytes(length=_INT_BYTES,
+                                                               byteorder=_BYTE_ORDER,
                                                                signed=False)
-    seed = key_scopes_dict[purpose].encode(ENCODING) + \
-         length_name_as_bytes + name.encode(ENCODING)
+    seed = 'com.lyndir.masterpassword'.encode(_ENCODING) + \
+         length_name_as_bytes + name.encode(_ENCODING)
     N = 32768
     r = 8
     p = 2
     dkLen = 64
     return scrypt.hash(key, seed, N, r, p, dkLen)
 
-def sitekey(site_name, master_key, counter, purpose):
+def sitekey(site_name, master_key, counter):
     """Phase 2: Your site key "com.lyndir.masterpassword"
 
     Your site key is a derivative from your master key when it is used to
@@ -77,14 +73,14 @@ def sitekey(site_name, master_key, counter, purpose):
     to a given counter value.
     """
     key = master_key
-    length_site_name_as_bytes = len(site_name.encode(ENCODING)).to_bytes(length=INT_BYTES,
-                                                                         byteorder=BYTE_ORDER,
+    length_site_name_as_bytes = len(site_name.encode(_ENCODING)).to_bytes(length=_INT_BYTES,
+                                                                         byteorder=_BYTE_ORDER,
                                                                          signed=False)
-    counter_as_bytes = counter.to_bytes(length=INT_BYTES,
-                                        byteorder=BYTE_ORDER,
+    counter_as_bytes = counter.to_bytes(length=_INT_BYTES,
+                                        byteorder=_BYTE_ORDER,
                                         signed=False)
-    seed = key_scopes_dict[purpose].encode(ENCODING) + length_site_name_as_bytes + \
-        site_name.encode(ENCODING) + counter_as_bytes
+    seed = 'com.lyndir.masterpassword'.encode(_ENCODING) + length_site_name_as_bytes + \
+        site_name.encode(_ENCODING) + counter_as_bytes
     return hmac.new(key, seed, hashlib.sha256).digest()
 
 # Output Templates:
@@ -189,18 +185,15 @@ def password(site_key, template_class):
 
 
 def generate_password(full_name,
-	              master_password,
-	              site_name,
+                      master_password,
+                      site_name,
 	              site_counter,
-	              key_purpose,
 	              result_type):
     master_key = masterKey(master_password,
-                           full_name,
-                           key_purpose)
+                           full_name)
     site_key = sitekey(site_name,
                        master_key,
-                       site_counter,
-                       key_purpose)
+                       site_counter)
     return password(site_key, result_type)
 
 left_arm_list = ["╔", "╚", "╰", "═"]
@@ -222,7 +215,7 @@ def identicon(full_name, master_password, use_color=False):
                        (len(master_password) == 0) or master_password is None)
     if non_legit_input:
         return ""
-    seed = hmac.new(master_password.encode(ENCODING), full_name.encode(ENCODING),
+    seed = hmac.new(master_password.encode(_ENCODING), full_name.encode(_ENCODING),
                     hashlib.sha256).digest()
     left_arm = left_arm_list[seed[0] % len(left_arm_list)]
     body = body_list[seed[1] % len(body_list)] 
