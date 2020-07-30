@@ -9,6 +9,6 @@ setup(name='pympw',
       url='https://github.com/emiljoha/pympw',
       py_modules=['mpw'],
       setup_requires=["pytest-runner"],
-      install_requires=['scrypt'],
+      install_requires=['scrypt', 'wheel'],
       tests_require=['pytest', 'pexpect']
 )
