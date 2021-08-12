@@ -105,7 +105,7 @@ def sitekey(site_name, master_key, counter):
 template_dictionary = {
     'Maximum': ['anoxxxxxxxxxxxxxxxxx', 'axxxxxxxxxxxxxxxxxno'],
     'Long': ['CvcvnoCvcvCvcv',
-             'CvcvCvcvCvccno',
+             'CvcvCvcvnoCvcv',
              'CvcvCvcvCvcvno',
              'CvccnoCvcvCvcv',
              'CvccCvcvnoCvcv',
@@ -116,7 +116,7 @@ template_dictionary = {
              'CvcvnoCvcvCvcc',
              'CvcvCvcvnoCvcc',
              'CvcvCvcvCvccno',
-             'CvcvCvcvCvccno',
+             'CvccnoCvccCvcv',
              'CvccCvccnoCvcv',
              'CvccCvccCvcvno',
              'CvcvnoCvccCvcc',
@@ -127,12 +127,12 @@ template_dictionary = {
              'CvccCvcvCvccno'],
     'Medium': ['CvcnoCvc', 'CvcCvcno'],
     'Short': ['Cvcn'],
-    'Basic': ['aaanaaan', 'aannaaan'],
+    'Basic': ['aaanaaan', 'aannaaan', 'aaannaaa'],
     'PIN': ['nnnn'],
     'Name': ['cvccvcvcv'],
     'Phrase': ['cvcc cvc cvccvcv cvc',
-               'cv cvccv cvc cvcvccv',
-               'cvc cvccvcvcv cvcv']
+               'cvc cvccvcvcv cvcv',
+               'cv cvccv cvc cvcvccv']
     }
 # Master Password Character Classes
 
