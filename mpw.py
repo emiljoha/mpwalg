@@ -238,3 +238,54 @@ def identicon(full_name, master_password, use_color=False):
         return color_code[color] + icon + color_code["White"]
     else:
         return icon
+
+
+# In the first release, some templates was wrong. The old "wrong"
+# passwords can be generated from "legacy_password" function.
+legacy_template_dictionary = {
+    'Maximum': ['anoxxxxxxxxxxxxxxxxx', 'axxxxxxxxxxxxxxxxxno'],
+    'Long': ['CvcvnoCvcvCvcv',
+             'CvcvCvcvCvccno',
+             'CvcvCvcvCvcvno',
+             'CvccnoCvcvCvcv',
+             'CvccCvcvnoCvcv',
+             'CvccCvcvCvcvno',
+             'CvcvnoCvccCvcv',
+             'CvcvCvccnoCvcv',
+             'CvcvCvccCvcvno',
+             'CvcvnoCvcvCvcc',
+             'CvcvCvcvnoCvcc',
+             'CvcvCvcvCvccno',
+             'CvcvCvcvCvccno',
+             'CvccCvccnoCvcv',
+             'CvccCvccCvcvno',
+             'CvcvnoCvccCvcc',
+             'CvcvCvccnoCvcc',
+             'CvcvCvccCvccno',
+             'CvccnoCvcvCvcc',
+             'CvccCvcvnoCvcc',
+             'CvccCvcvCvccno'],
+    'Medium': ['CvcnoCvc', 'CvcCvcno'],
+    'Short': ['Cvcn'],
+    'Basic': ['aaanaaan', 'aannaaan'],
+    'PIN': ['nnnn'],
+    'Name': ['cvccvcvcv'],
+    'Phrase': ['cvcc cvc cvccvcv cvc',
+               'cv cvccv cvc cvcvccv',
+               'cvc cvccvcvcv cvcv']
+    }
+
+
+def legacy_password(site_key, template_class):
+    """Same as the regular password algorithm but uses the previous
+    templates that did not match the specification."""
+
+    if template_class not in template_dictionary_legacy:
+        raise ValueError("%s not a valid template" % template_class)
+    templates = template_dictionary[template_class]
+    template = templates[site_key[0] % len(templates)]
+    password = []
+    for i in range(len(template)):
+        pass_chars = template_chars_dictionary[template[i]]
+        password.append(pass_chars[site_key[i+1] % len(pass_chars)])
+    return ''.join(password)
