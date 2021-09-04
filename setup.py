@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 from setuptools import setup
 
-setup(name='pympw',
-      version='0.2',
+setup(name='mpwalg',
+      version='0.2.1',
       description='Calculate a site\'s password',
       author='Emil Johansson',
       author_email='emil.sweden@gmail.com',
