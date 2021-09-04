@@ -2,7 +2,7 @@
 from setuptools import setup
 
 setup(name='pympw',
-      version='0.1',
+      version='0.2',
       description='Calculate a site\'s password',
       author='Emil Johansson',
       author_email='emil.sweden@gmail.com',
